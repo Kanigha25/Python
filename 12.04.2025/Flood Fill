@@ -1,0 +1,27 @@
+class Solution(object):
+    def floodFill(self, image, sr, sc, color):
+        """
+        :type image: List[List[int]]
+        :type sr: int
+        :type sc: int
+        :type color: int
+        :rtype: List[List[int]]
+        """
+        if image[sr][sc] == color:
+            return image
+        else:
+            stack = {(sr, sc)}
+            while stack:
+                i, j = stack.pop()
+                if i > 0 and image[i-1][j] == image[i][j]:
+                    stack.add((i - 1, j))
+                if j > 0 and image[i][j-1] == image[i][j]:
+                    stack.add((i, j - 1))
+                if i < len(image) - 1 and image[i+1][j] == image[i][j]:
+                    stack.add((i + 1, j))
+                if j < len(image[0]) - 1 and image[i][j+1] == image[i][j]:
+                    stack.add((i, j + 1))
+                image[i][j] = color
+            
+            return image
+                
