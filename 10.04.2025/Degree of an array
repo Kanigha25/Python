@@ -1,0 +1,33 @@
+class Solution(object):
+    def findShortestSubArray(self, nums):
+        #create a dictionary containing frequency of each num found so far
+        #create a dictionary containing leftmost index for a given value
+        #create a dictionary containing rightmost index for a given value
+        repeatCounts = {}
+        lefts = {}
+        rights = {}
+
+        #iterate through the list to fill the dictionaries with 
+        #their respective data
+        for index, i in enumerate(nums):
+            if i in repeatCounts:
+                repeatCounts[i] += 1
+                rights[i] = index
+            else:
+                repeatCounts[i] = 1
+                lefts[i] = index
+                rights[i] = index
+
+        #find highest degree (highest number of repeats for any value in list)
+        maxRepeats = max(repeatCounts.values())
+
+        #form a list of the values which share highest degree
+        keys = [key for key, value in repeatCounts.items() if value == maxRepeats]
+
+        #iterate through the list of values sharing highest degree and find
+        #the value with smallest difference between its rightmost index and leftmost index
+        #add one to this value and return it 
+        #because difference tells us distance between indeces (non inclusive) while we
+        #want to return length of substring
+        return min([rights[key] - lefts[key] for key in keys]) + 1
+            
