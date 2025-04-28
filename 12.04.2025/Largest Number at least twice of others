@@ -1,0 +1,19 @@
+class Solution(object):
+    def dominantIndex(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        if len(nums) == 1:
+            return 0  # If there's only one element, it's always dominant.
+
+        max_index = 0  # Track index of max element
+        for i in range(len(nums)):
+            if nums[i] > nums[max_index]:
+                max_index = i
+
+        for i in range(len(nums)):
+            if i != max_index and nums[i] * 2 > nums[max_index]:  
+                return -1  # If any number is more than half of max, return -1
+
+        return max_index  # Otherwise, return index of max element
