@@ -1,0 +1,33 @@
+class Solution(object):
+    def selfDividingNumbers(self, left, right):
+        """
+        :type left: int
+        :type right: int
+        :rtype: List[int]
+        """
+        sol=[]
+        for i in range(left,right+1):
+            sol.append(i)
+        for i in range(left,right+1):
+            lst=[]
+            res=[]
+            new=i
+            while i!=0:
+                lst.append(i%10)
+                i=i//10
+            for j in lst:
+                if j!=0:
+                    if new%j==0:
+                        res.append('true')
+                    else:
+                        res.append('false')
+                if j==0:
+                    res.append('false')
+            if 'false' in res:
+                sol.remove(new)
+        return sol
+
+                
+
+                
+            
