@@ -1,0 +1,19 @@
+class Solution(object):
+    def letterCasePermutation(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        ans=[]
+        def io(input,output,s):
+            if ( input == ""):
+                s.append(output)
+                return s
+            elif ( input[0].isdigit()):
+                 io(input[1:],input[0]+output,s)
+
+            else:
+                io(input[1:],input[0].upper()+output,s)
+                io(input[1:],input[0].lower()+output,s)
+            return s
+        return io (s[::-1],"",ans)
