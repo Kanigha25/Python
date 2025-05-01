@@ -1,0 +1,24 @@
+class Solution(object):
+    def swimInWater(self, grid):
+        pq = []
+        visited = set()
+        rows = len(grid)
+        cols = len(grid[0])
+        directions = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+        pq.append([grid[0][0], 0, 0])
+
+        while pq:
+            elevation, r, c = heapq.heappop(pq)
+            if (r, c) in visited:
+                continue
+            visited.add((r, c))
+            if (r, c) == (rows - 1, cols - 1):
+                return elevation
+            
+            for dr, dc in directions:
+                newR, newC = r + dr, c + dc
+                if newR < 0 or newC < 0 or newR >= rows or newC >= cols or (newR, newC) in visited:
+                    continue
+                maximumElevation = max(grid[newR][newC], elevation)
+                heapq.heappush(pq, [maximumElevation, newR, newC])
+        
