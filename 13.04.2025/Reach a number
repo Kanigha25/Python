@@ -1,0 +1,20 @@
+class Solution(object):
+    def reachNumber(self, target):
+        target = abs(target)  # We can consider only the positive target
+        
+        # Find the minimum number of steps required to reach or pass the target
+        steps = 0
+        current_sum = 0
+        
+        while current_sum < target or (current_sum - target) % 2 != 0:
+            steps += 1
+            current_sum += steps
+        
+        return steps
+
+
+
+
+
+
+        
