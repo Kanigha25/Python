@@ -1,0 +1,27 @@
+from math import ceil
+class Solution(object):
+    
+    def numRabbits(self, answers):
+        """
+        :type answers: List[int]
+        :rtype: int
+        """
+
+        dict={}
+
+        for i in range(len(answers)):
+            if answers[i] in dict:
+                dict[answers[i]]+=1
+            else:
+                dict[answers[i]]=1
+
+        rabbit=0
+
+        for x,count in dict.items():
+            groupsize=x+1
+            group=(count+groupsize-1)//groupsize
+            rabbit+=groupsize*group
+
+        return rabbit
+
+        
