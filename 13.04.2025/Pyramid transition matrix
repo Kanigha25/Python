@@ -1,0 +1,103 @@
+# Stack for DFS
+class Stack():
+    def __init__(self):
+        self.lst = []
+
+    def size(self):
+        return len(self.lst)
+    
+    def add(self, v):
+        self.lst.append(v)
+        return None
+
+    def top(self):
+        return self.lst[-1]
+
+    def pop(self):
+        if self.size() == 0:
+            print("empty stack pop")
+            return None
+        return self.lst.pop()
+
+class Solution(object):
+    def pyramidTransition(self, bottom, allowed):
+        """
+        :type bottom: str
+        :type allowed: List[str]
+        :rtype: bool
+        """
+        # memorized func
+        def memory_f(func):
+            ret = {}
+            def memorized_f(*args):
+                if args not in ret:
+                    ret[args] = func(*args)
+                return ret[args]
+            return memorized_f
+    
+        # check the left
+        def allowedLetterLeft(left, val):
+            if left == "":
+                return True
+            for i in range(len(allowed)):
+                if allowed[i][0] == left and allowed[i][1] == val:
+                    return True
+            return False
+
+        # check the triangle
+        def allowedLetterDown(downL, downR, val):
+            for i in range(len(allowed)):
+                if allowed[i][0] == downL and allowed[i][1] == downR and allowed[i][2] == val:
+                    return True
+            return False
+        
+        # memory function allowedLetterDown and allowedLetterLeft
+        allowedLetterDown, allowedLetterLeft = memory_f(allowedLetterDown), memory_f(allowedLetterLeft)
+
+        # expand condition
+        def allowedLetter(left, downL, downR, val):
+            return allowedLetterLeft(left, val) and allowedLetterDown(downL, downR, val)
+        
+        letters = ["A", "B", "C", "D", "E", "F"]
+        length = len(bottom)
+
+        # build a layer on the bottom
+        def pyramidLayer(bottom):            
+            length = len(bottom)
+
+            if length == 1:
+                return True
+            
+            stack = Stack()
+            ret = ["" for _ in range(length-1)]
+
+            for l in letters:
+                if allowedLetter("", bottom[0], bottom[1], l):
+                    node = [0, l]
+                    stack.add(node)
+
+            while stack.size() != 0:
+                node = stack.pop()
+                position, letter = node
+                ret[position] = letter
+
+                # find a solution for this layer
+                if position == length-2:
+                    return ret
+                
+                # the block on the rigth of the node
+                for l in letters:
+                    if allowedLetter(letter, bottom[position+1], bottom[position+2], l):
+                        stack.add([position+1, l])
+
+            return False
+        
+        # build by layers
+        for _ in range(length-1, 0, -1):
+            new_bottom = pyramidLayer(bottom)
+            if new_bottom == False:
+                return False
+            else:
+                bottom = new_bottom
+
+        return True
