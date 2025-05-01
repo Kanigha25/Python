@@ -1,0 +1,34 @@
+import heapq as hq
+
+class Solution(object):
+    def reorganizeString(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        counter = {}
+        for l in s:
+            counter[l] = counter.get(l, 0) + 1
+        counter = [(-v, k) for k, v in counter.items()]
+        hq.heapify(counter)
+        
+        res = ''
+        for _ in range(len(s)):
+            pair1 = hq.heappop(counter)
+            v, k = -pair1[0], pair1[1]
+            if len(res) == 0 or res[-1] != k:
+                res += k
+                v -= 1
+                if v > 0:
+                    hq.heappush(counter, (-v, k))
+            elif len(counter) > 0:
+                pair2 = hq.heappop(counter)
+                v2, k2 = -pair2[0], pair2[1]
+                res += k2
+                v2 -= 1
+                hq.heappush(counter, (-v, k))
+                if v2 > 0:
+                    hq.heappush(counter, (-v2, k2))
+            else:
+                return ""
+        return res
