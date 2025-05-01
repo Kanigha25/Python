@@ -1,0 +1,57 @@
+class Solution(object):
+    def partitionLabels(self, s):
+        """
+        :type s: str
+        :rtype: List[int]
+        """
+        dic = {
+            'a' : 0,
+            'b' : 1,
+            'c' : 2,
+            'd' : 3,
+            'e' : 4,
+            'f' : 5,
+            'g' : 6,
+            'h' : 7,
+            'i' : 8,
+            'j' : 9,
+            'k' : 10,
+            'l' : 11,
+            'm' : 12,
+            'n' : 13,
+            'o' : 14,
+            'p' : 15,
+            'q' : 16,
+            'r' : 17,
+            's' : 18,
+            't' : 19,
+            'u' : 20,
+            'v' : 21,
+            'w' : 22,
+            'x' : 23,
+            'y' : 24,
+            'z' : 25
+        }
+        end_i = [-1]*26
+        max_so_far=0
+        prev_max=-1
+        ans = []
+
+
+        for i,char in enumerate(s):
+            end_i[dic[char]] = i
+        
+        for i,char in enumerate(s):
+            if end_i[dic[char]] > max_so_far:
+                max_so_far = end_i[dic[char]]
+            
+            if max_so_far==i:
+                ans.append(i-prev_max)
+                prev_max=max_so_far
+        
+        return ans
+            
+
+            
+
+
