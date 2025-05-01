@@ -1,0 +1,18 @@
+class Solution:
+    def crackSafe(self, n, k):
+        result = []
+        visited = set()
+        start = "0" * (n - 1)  # Initialize starting prefix of size n-1 filled with '0'
+
+        # Perform DFS to find the sequence
+        self.dfs(start, k, visited, result)
+        result.append(start)  # Append the starting prefix to the result
+        return "".join(result)
+
+    def dfs(self, node, k, visited, result):
+        for i in range(k):
+            next_node = node + str(i)
+            if next_node not in visited:  # If the combination has not been visited
+                visited.add(next_node)
+                self.dfs(next_node[1:], k, visited, result)  # Recurse with the next prefix
+                result.append(str(i))  # Append the digit to the result
