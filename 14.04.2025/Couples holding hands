@@ -1,0 +1,40 @@
+class Solution(object):
+    def swap(self,row,val1,val2):
+        valindex1 = row.index(val1)
+        valindex2 = row.index(val2)
+        row[valindex1], row[valindex2] = row[valindex2] ,row[valindex1]
+        
+    def minSwapsCouples(self, row):
+        """
+        :type row: List[int]
+        :rtype: int
+        """
+        swaps=0
+        for i in range(0,len(row),2):
+            if row[i]==row[i+1]+1 or row[i]==row[i+1]-1:
+                swaps+=0
+            else:
+                swaps+=1
+                if row[i]%2==0:
+                    val1=row[i+1]
+                    val2=row[i]+1
+                    Solution().swap(row,val1,val2)
+                else:
+                    val1=row[i+1]
+                    val2=row[i]-1
+                    Solution().swap(row,val1,val2)
+        for i in range(0,len(row),2):
+            if row[i]==row[i+1]+1 or row[i]==row[i+1]-1:
+                swaps+=0
+            else:
+                swaps+=1
+                if row[i]%2==0:
+                    val1=row[i+1]
+                    val2=row[i]+1
+                    Solution().swap(row,val1,val2)
+                else:
+                    val1=row[i+1]
+                    val2=row[i]-1
+                    Solution().swap(row,val1,val2)
+        return swaps
+        
