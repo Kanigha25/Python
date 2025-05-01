@@ -1,0 +1,21 @@
+class Solution(object):
+    def isBipartite(self, graph):
+        """
+        :type graph: List[List[int]]
+        :rtype: bool
+        """
+        color=[-1]*(len(graph)+1)
+        q=deque()
+        for i in range(len(graph)):
+            if(color[i]==-1):
+                color[i]=0
+                q.append(i)
+            while q:
+                node = q.popleft()
+                for u in graph[node]:
+                    if(color[u]==-1):
+                        color[u]=1-color[node]
+                        q.append(u)
+                    elif(color[u]==color[node]):
+                        return False
+        return True
