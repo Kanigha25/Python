@@ -1,0 +1,70 @@
+class Solution(object):
+    def containVirus(self, isInfected):
+        """
+        :type isInfected: List[List[int]]
+        :rtype: int
+        """
+        # start with infected cell and map the start of cells to 
+        def get_regions():
+            visited = [[False] * n for _ in range(m)]
+            regions = []
+            frontiers = []
+            walls_needed = []
+            
+            def bfs(x, y):
+                queue = deque([(x, y)])
+                visited[x][y] = True
+                region = [(x, y)]
+                frontier = set()
+                walls = 0
+                
+                while queue:
+                    cx, cy = queue.popleft()
+                    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                        nx, ny = cx + dx, cy + dy
+                        if 0 <= nx < m and 0 <= ny < n:
+                            if not visited[nx][ny]:
+                                if isInfected[nx][ny] == 1:
+                                    visited[nx][ny] = True
+                                    queue.append((nx, ny))
+                                    region.append((nx, ny))
+                                elif isInfected[nx][ny] == 0:
+                                    frontier.add((nx, ny))
+                                    walls += 1
+                return region, frontier, walls
+            
+            for i in range(m):
+                for j in range(n):
+                    if isInfected[i][j] == 1 and not visited[i][j]:
+                        region, frontier, walls = bfs(i, j)
+                        if region:
+                            regions.append(region)
+                            frontiers.append(frontier)
+                            walls_needed.append(walls)
+            
+            return regions, frontiers, walls_needed
+        
+        m, n = len(isInfected), len(isInfected[0])
+        total_walls = 0
+        
+        while True:
+            regions, frontiers, walls_needed = get_regions()
+            if not regions:
+                break
+            
+            # Find the region with the maximum threat
+            max_threat_index = max(range(len(frontiers)), key=lambda i: len(frontiers[i]))
+            total_walls += walls_needed[max_threat_index]
+            
+            # Contain the most threatening region
+            for x, y in regions[max_threat_index]:
+                isInfected[x][y] = -1
+            
+            # Spread the virus from other regions
+            for i in range(len(regions)):
+                if i == max_threat_index:
+                    continue
+                for x, y in frontiers[i]:
+                    isInfected[x][y] = 1
+        
+        return total_walls
