@@ -1,0 +1,65 @@
+class Solution(object):
+    def maskPII(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+
+        def mask_email(s):
+
+            first_letter = ""
+            last_letter = ""
+            asterik_letter = "*****"
+            email = ""
+            domain_index = len(s)
+
+            for i in range(0, len(s)):
+                
+                if i == 0:
+                    first_letter = s[i].lower()
+
+                if i != len(s) - 1 and s[i + 1] == "@":
+                    last_letter = s[i].lower()
+                    domain_index = i + 1
+                    email = first_letter + asterik_letter + last_letter
+
+                if i >= domain_index:
+                    if s[i].isalpha():
+                        email += s[i].lower()
+                    else:
+                        email += s[i].lower()
+            return email
+
+        def mask_phone(s):
+
+            count_num = 0 
+            
+            last_four = ""
+
+            for i in range(len(s)-1, 0, -1):
+                if len(last_four) == 4:
+                    break
+
+                if s[i].isnumeric():
+                    last_four += s[i]
+                
+            masked_phone = "***-***-" + last_four[::-1]
+
+            for i in s:
+                if i.isnumeric():
+                    count_num += 1
+
+            if count_num == 10:
+                return masked_phone
+            else:
+                country_code_count = count_num - 10
+                return "+" + (country_code_count * "*") + "-" + masked_phone
+
+        if s == "":
+            return s
+
+        if s[-1].isalpha():
+            return mask_email(s)
+        else:
+            return mask_phone(s)
+            
