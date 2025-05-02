@@ -1,0 +1,23 @@
+class Solution(object):
+    def numComponents(self, head, nums):
+        """
+        :type head: ListNode
+        :type nums: List[int]
+        :rtype: int
+        """
+        hashed = {}
+        for i in range(len(nums)):
+            hashed[nums[i]] = i
+       
+        ind_ptr = 0
+        count = 0
+        while(head):
+            curr = head.val
+            head = head.next
+            if(curr in hashed and ind_ptr != 1):
+                ind_ptr = 1
+                count+=1
+            elif(curr not in hashed):
+                ind_ptr = 0
+            
+        return count
