@@ -1,0 +1,63 @@
+import random
+
+class Solution(object):
+    def findSecretWord(self, words, master):
+        """
+        :type words: List[Str]
+        :type master: Master
+        :rtype: None
+        """
+        def most_overlap_word():
+            record = [[0 for __ in range(26)] for __ in range(6)]
+            for word in candidates:
+                for i, c in enumerate(word):
+                    record[i][ord(c) - ord('a')] += 1
+            
+            best = 0
+            for word in candidates:
+                score = 0
+                for i, c in enumerate(word):
+                    score += record[i][ord(c) - ord('a')]
+                if score > best:
+                    best = score
+                    best_word = word
+            return best_word
+
+        def greedy_balance():
+
+            '''
+            if each character randomly splits candidates, 
+            we want r**6 ~ 1/6; r ~ 1/6**(1/6)
+            '''
+            targ_r = (1/6)**(1/6)
+            length = len(candidates)
+            filtered = candidates[:]
+            
+            # for i in random.sample(range(6), 6):
+            for i in range(5, 0, -1):
+                char_count = [0 for __ in range(26)]
+                char_words = [[] for __ in range(26)]
+                for word in filtered:
+                    index = ord(word[i]) - ord('a')
+                    char_count[index] += 1    
+                    char_words[index].append(word)
+                char_diff = [abs(count - len(filtered)*targ_r) for count in char_count]
+                select_char_index = char_diff.index(min(char_diff))
+                filtered = char_words[select_char_index]
+            return random.choice(filtered)
+        
+        def matches(a,b):
+            return sum(c1==c2 for c1, c2 in zip(a,b))
+            
+        candidates = words[:]
+        iter_ = 0
+        while candidates:
+            if iter_ < 1:
+                key = greedy_balance()
+            else:
+                key = most_overlap_word()
+            r = master.guess(key)
+            if r == 6:
+                return
+            candidates = [w for w in candidates if matches(key, w) == r]
+            iter_ += 1
