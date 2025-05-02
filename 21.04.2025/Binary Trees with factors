@@ -1,0 +1,17 @@
+class Solution(object):
+    def numFactoredBinaryTrees(self, arr):
+        """
+        :type arr: List[int]
+        :rtype: int
+        """
+        dp = [1 for _ in range(len(arr))]
+        hashmap = defaultdict(int)
+        arr_set = set(arr)
+        arr.sort()
+        for i in range(len(arr)):
+            for j in range(i):
+                if arr[i]/arr[j] in arr_set and arr[i]%arr[j] == 0:
+                    dp[i] += (hashmap[arr[j]]*hashmap[arr[i]/arr[j]])
+            hashmap[arr[i]] = dp[i]
+        return sum(dp) %(10**9 + 7)
+                
