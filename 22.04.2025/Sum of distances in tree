@@ -1,0 +1,25 @@
+from collections import defaultdict
+
+class Solution(object):
+    def sumOfDistancesInTree(self, n, edges):
+        tree = defaultdict(list)
+        for a, b in edges:
+            tree[a].append(b)
+            tree[b].append(a)
+        count = [1] * n 
+        answer = [0] * n
+        def post_order(node, parent):
+            for neighbor in tree[node]:
+                if neighbor != parent:
+                    post_order(neighbor, node)
+                    count[node] += count[neighbor]
+                    answer[0] += answer[neighbor] + count[neighbor]
+        def pre_order(node, parent):
+            for neighbor in tree[node]:
+                if neighbor != parent:
+                    answer[neighbor] = answer[node] + (n - count[neighbor]) - count[neighbor]
+                    pre_order(neighbor, node)
+        post_order(0, -1)
+        pre_order(0, -1)
+        
+        return answer
