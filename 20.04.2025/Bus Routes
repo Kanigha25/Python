@@ -1,0 +1,46 @@
+from collections import defaultdict, deque
+
+class Solution(object):
+    def numBusesToDestination(self, routes, source, target):
+        """
+        :type routes: List[List[int]]
+        :type source: int
+        :type target: int
+        :rtype: int
+        """
+        if source == target:
+            return 0
+
+        # Create a dictionary to store the stops for each route
+        stops_on_route = defaultdict(list)
+        for i, route in enumerate(routes):
+            for stop in route:
+                stops_on_route[stop].append(i)
+
+        # Initialize a set to keep track of visited stops and routes
+        visited_stops = set()
+        visited_routes = set()
+
+        # Initialize a queue for BFS
+        queue = deque([(source, 0)])
+
+        while queue:
+            current_stop, num_buses = queue.popleft()
+
+            # Check if the current stop is the target
+            if current_stop == target:
+                return num_buses
+
+            # Mark the current stop as visited
+            visited_stops.add(current_stop)
+
+            # Iterate over the routes that pass through the current stop
+            for route_index in stops_on_route[current_stop]:
+                if route_index not in visited_routes:
+                    visited_routes.add(route_index)
+                    for next_stop in routes[route_index]:
+                        if next_stop not in visited_stops:
+                            queue.append((next_stop, num_buses + 1))
+
+        # If no path is found
+        return -1
