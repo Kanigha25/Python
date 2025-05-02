@@ -1,0 +1,42 @@
+class Solution(object):
+    def pushDominoes(self, dominoes):
+        """
+        :type dominoes: str
+        :rtype: str
+        """
+        n = len(dominoes)
+        right_forces = [0 for i in range(n)]
+        left_forces = [0 for i in range(n)]
+
+        force = 0
+        # Calculate right forces (going left to right)
+        for i in range(n):
+            # Reset force to 0 when we see an 'L'
+            if dominoes[i] == 'L':
+                force = 0
+            elif dominoes[i] == 'R':
+                # Reset force to maximum when we see an 'R'
+                force = n
+            else:
+                force = max(0, force - 1)            
+            right_forces[i] = force
+        force = 0
+        # Calculate left force (similar)
+        for i in range(n - 1, -1, -1):
+            if dominoes[i] == 'L':
+                force = n
+            elif dominoes[i] == 'R':
+                force = 0
+            else:
+                force = max(0, force - 1)
+            left_forces[i] = force
+        ans = []
+        for i in range(n):
+            if left_forces[i] > right_forces[i]:
+                ans.append('L')
+            elif left_forces[i] < right_forces[i]:
+                ans.append('R')
+            else:
+                ans.append('.')
+        
+        return "".join(ans)
