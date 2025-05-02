@@ -1,0 +1,18 @@
+class Solution(object):
+    def canVisitAllRooms(self, rooms):
+        """
+        :type rooms: List[List[int]]
+        :rtype: bool
+        """
+        n = len(rooms)
+        visited = set()
+        def bfs(i):
+            visited.add(i)
+            if len(visited) == n:
+                return True
+            for key in rooms[i]:
+                if key not in visited:
+                    if bfs(key):
+                        return True
+            return False
+        return bfs(0)
