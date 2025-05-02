@@ -1,0 +1,37 @@
+class Solution(object):
+    def soupServings(self, n):
+        if n >= 5000:
+            return 1 
+
+        dp={}
+
+        P_taken=[[100,0],[75,25],[50,50],[25,75]]
+
+
+        def helper(A,B):
+
+
+            if A <= 0 and B <= 0:
+                return 0.5 
+
+            if A<=0:
+                return 1
+            if B<=0:
+                return 0.0
+            
+            if (A,B) in dp:
+                return dp[(A,B)]
+            
+            probability=0
+            for i in range(len(P_taken)):
+                prob_A=P_taken[i][0]
+                prob_B=P_taken[i][1]
+
+                probability+=helper(A-prob_A,B-prob_B)
+            
+            dp[(A, B)] = 0.25 * probability
+            return dp[(A, B)]
+        return helper(n,n)
+
+            
+        
