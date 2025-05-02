@@ -1,0 +1,26 @@
+from collections import deque
+import copy
+
+
+class Solution(object):
+    def shortestPathLength(self, graph):
+        queue = deque()
+        for i in range(len(graph)):
+            queue.append((i, 0, 1 << i))
+        memo = [[1 << 14]*(1 << len(graph)) for i in range(len(graph))]
+        result = 1 << 15
+        while queue:
+            curr, dist, bitmask = queue.popleft()
+            bitmask = bitmask | 1 << curr
+            if bitmask == len(memo[curr]) - 1:
+                result = min(dist, result)
+            if dist < result and memo[curr][bitmask] > dist:
+                memo[curr][bitmask] = dist
+                for node in graph[curr]:
+                    queue.append((node, dist + 1, bitmask))
+        return result
+        """
+        :type graph: List[List[int]]
+        :rtype: int
+        """
+        
