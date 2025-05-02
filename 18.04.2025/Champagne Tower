@@ -1,0 +1,17 @@
+class Solution(object):
+    def champagneTower(self, poured, query_row, query_glass):
+        tower = [[0. for j in range(i+1)]for i in range(100)]
+        tower[0][0] = poured
+        flow = poured
+        row = 0
+        while flow and row < 99:
+            flow = 0
+            for i,k in enumerate(tower[row]):
+                if k > 1:
+                    over = k - 1
+                    flow += over
+                    tower[row+1][i] += over / 2.
+                    tower[row+1][i+1] += over / 2.
+                    tower[row][i] = 1
+            row+=1         
+        return tower[query_row][query_glass]
