@@ -1,0 +1,94 @@
+class Solution(object):
+    def largestOverlap(self, img1, img2):
+        """
+        :type img1: List[List[int]]
+        :type img2: List[List[int]]
+        :rtype: int
+        """
+        n = len(img1)
+
+        def overlap(mat1, mat2):
+            count = 0
+            for i in range(n):
+                for j in range(n):
+                    if mat1[i][j] == 1 and mat2[i][j] == 1:
+                        count += 1
+            return count
+            
+        def moveX(mat, x):
+            newMat = [[0] * n for i in range(n)]
+            for i in range(n):
+                for j in range(n):
+                    if mat[i][j] == 1:
+                        newX = i + x
+                        if 0 <= newX < n:
+                            newMat[newX][j] = 1
+            return newMat
+            
+        def moveY(mat, y):
+            newMat = [[0] * n for i in range(n)]
+            for i in range(n):
+                for j in range(n):
+                    if mat[i][j] == 1:
+                        newY = j + y
+                        if 0 <= newY < n:
+                            newMat[i][newY] = 1
+            return newMat
+
+        visited = set()
+        def tryRightDown(mat):
+            oneSum = sum([i.count(1) for i in mat])
+            strMat = str(mat)
+            if oneSum == 0 or oneSum < self.maxOverlap or strMat in visited:
+                return
+            visited.add(strMat)
+            self.maxOverlap = max(self.maxOverlap, overlap(mat, img2))
+            tryRightDown(moveX(mat, 1))
+            tryRightDown(moveY(mat, 1))
+
+        def tryLeftUp(mat):
+            oneSum = sum([i.count(1) for i in mat])
+            strMat = str(mat)
+            if oneSum == 0 or oneSum < self.maxOverlap or strMat in visited:
+                return
+            visited.add(strMat)
+            self.maxOverlap = max(self.maxOverlap, overlap(mat, img2))
+            tryLeftUp(moveX(mat, -1))
+            tryLeftUp(moveY(mat, -1))
+
+        def tryRightUp(mat):
+            oneSum = sum([i.count(1) for i in mat])
+            strMat = str(mat)
+            if oneSum == 0 or oneSum < self.maxOverlap or strMat in visited:
+                return
+            visited.add(strMat)
+            self.maxOverlap = max(self.maxOverlap, overlap(mat, img2))
+            tryRightUp(moveX(mat, -1))
+            tryRightUp(moveY(mat, 1))
+
+        def tryLeftDown(mat):
+            oneSum = sum([i.count(1) for i in mat])
+            strMat = str(mat)
+            if oneSum == 0 or oneSum < self.maxOverlap or strMat in visited:
+                return
+            visited.add(strMat)
+
+            self.maxOverlap = max(self.maxOverlap, overlap(mat, img2))
+            tryLeftDown(moveX(mat, 1))
+            tryLeftDown(moveY(mat, -1))
+        
+
+
+
+        self.maxOverlap = overlap(img1, img2)
+        tryLeftUp(img1)
+        visited = set()
+
+        tryRightDown(img1)
+        visited = set()
+
+        tryLeftDown(img1)
+        visited = set()
+        tryRightUp(img1)
+
+        return self.maxOverlap
