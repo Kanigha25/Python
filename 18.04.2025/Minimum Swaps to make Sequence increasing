@@ -1,0 +1,25 @@
+class Solution(object):
+    def minSwap(self, nums1, nums2):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: int
+        """
+        n = len(nums1)
+        keep = [float('inf')] * n
+        swap = [float('inf')] * n
+
+        keep[0] = 0 # No swap at first index
+        swap[0] = 1 # Swap at first index
+
+        for i in range(1, n):
+            # If the current pair is greater than the previous pair without swapping
+            if nums1[i] > nums1[i - 1] and nums2[i] > nums2[i-1]:
+                keep[i] = keep[i - 1]
+                swap[i] = swap[i - 1] + 1
+            # If the current pair is greater than the previous pair with swapping
+            if nums1[i] > nums2[i - 1] and nums2[i] > nums1[i - 1]:
+                keep[i] = min(keep[i], swap[i - 1])
+                swap[i] = min(swap[i], keep[i - 1] + 1)
+
+        return min(keep[-1], swap[-1])
