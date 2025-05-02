@@ -1,0 +1,27 @@
+class Solution(object):
+    def findReplaceString(self, s, indices, sources, targets):
+        """
+        :type s: str
+        :type indices: List[int]
+        :type sources: List[str]
+        :type targets: List[str]
+        :rtype: str
+        """
+        split_s = list(s)
+        values = []
+        for i in range(len(sources)):
+            si, ei = indices[i], indices[i] + len(sources[i]) 
+            if sources[i] == s[si: ei]:
+                values.append((si, ei, targets[i]))
+        
+        for si, ei, target in values:
+            split_s[si] = target
+            for i in range(si+1, ei):
+                split_s[i] = ''
+        return ''.join(split_s)
+        
+     
+
+                    
+
+        
