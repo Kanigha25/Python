@@ -1,0 +1,16 @@
+class Solution(object):
+    def allPathsSourceTarget(self, graph):
+        """
+        :type graph: List[List[int]]
+        :rtype: List[List[int]]
+        """
+        def dfs(idx,c):
+            if idx==len(graph)-1:
+                return [c]
+            res=[]
+            for node in graph[idx]:
+                res+=dfs(node,c+[node])
+            return res
+        return dfs(0,[0])
+
+        
