@@ -1,0 +1,22 @@
+class Solution:
+    def shiftingLetters(self, s, shifts):
+        result = list(s)
+        
+        cumulative_shift = 0
+        
+        for i in range(len(shifts) - 1, -1, -1):
+            cumulative_shift += shifts[i]
+            cumulative_shift %= 26 
+            
+            current_char = s[i]
+            new_char = chr((ord(current_char) - ord('a') + cumulative_shift) % 26 + ord('a'))
+            
+            result[i] = new_char
+        
+        return ''.join(result)
+#output
+solution = Solution()
+s="abc"
+shifts=[3,5,9]
+output = solution.shiftingLetters(s, shifts)
+print(output)   
