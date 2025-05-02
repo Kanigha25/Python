@@ -1,0 +1,54 @@
+class Solution(object):
+    def numSimilarGroups(self, strs):
+        """
+        :type strs: List[str]
+        :rtype: int
+        """
+        def union(u, v, parent):
+            parent[u] = v
+
+        def find(i, parent):
+            root = i
+            while parent[root] != -1:
+                root = parent[root]
+            
+            while i != root:
+                temp = parent[i]
+                parent[i] = root
+                i = temp
+
+            return root
+        
+        def isSimilar(str1, str2):
+            if str1 == str2:
+                return True
+            
+            diffPos = []
+            for i in range(len(str1)):
+                if str1[i] != str2[i]:
+                    diffPos.append(i)
+
+            if len(diffPos) > 2:
+                return False
+            
+            return str1[diffPos[0]] == str2[diffPos[1]] and str1[diffPos[1]] == str2[diffPos[0]]
+
+        n = len(strs)
+        parent = [-1]*n
+        for i in range(n):
+            for j in range(i+1, n):
+                if isSimilar(strs[i], strs[j]):
+                    u = find(i, parent)
+                    v = find(j, parent)
+                    if u != v:
+                        union(u, v, parent)
+
+        ans = 0
+        for i in range(n):
+            if parent[i] == -1:
+                ans += 1
+        
+        return ans
+
+    
+        
