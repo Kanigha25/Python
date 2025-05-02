@@ -1,0 +1,11 @@
+class Solution(object):
+    def maxProfitAssignment(self, difficulty, profit, worker):
+        jobs=sorted(zip(difficulty,profit))
+        i,best=0,0
+        ans=0
+        for j in sorted(worker):
+            while i<len(jobs) and j>=jobs[i][0]:
+                best=max(best,jobs[i][1])
+                i+=1
+            ans+=best
+        return ans
