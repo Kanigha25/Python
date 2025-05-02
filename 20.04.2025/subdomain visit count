@@ -1,0 +1,13 @@
+class Solution(object):
+    def subdomainVisits(self, cpdomains):
+        """
+        :type cpdomains: List[str]
+        :rtype: List[str]
+        """
+        ndict=defaultdict(int)
+        for string in cpdomains:
+            string=string.split()
+            domains=string[1].split(".")
+            for idx in range(len(domains)-1,-1,-1):
+                ndict[".".join(domains[idx:])]+=int(string[0])
+        return [ str(ndict[key])+" "+key for key in ndict]
