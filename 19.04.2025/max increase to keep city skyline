@@ -1,0 +1,19 @@
+class Solution(object):
+    def maxIncreaseKeepingSkyline(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+        # Calculate the row-wise and column-wise skylines
+        row_max = [max(row) for row in grid]  # Max height in each row (West-East skyline)
+        col_max = [max(grid[r][c] for r in range(len(grid))) for c in range(len(grid[0]))]  # Max height in each column (North-South skyline)
+
+        # Calculate the total increase
+        total_increase = 0
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                # New height is the minimum of row_max and col_max
+                new_height = min(row_max[r], col_max[c])
+                total_increase += new_height - grid[r][c]
+
+        return total_increase
