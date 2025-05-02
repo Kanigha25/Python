@@ -1,0 +1,57 @@
+# Brute Force
+# class Solution(object):
+#     def numFriendRequests(self, ages):
+#         total=0
+#         n=len(ages)
+#         for i in range(n):
+#             ageSender=ages[i]
+#             # sentSender=0
+#             for j in range(n):
+#                 if i==j:
+#                     continue
+#                 ageReceiver=ages[j]       #Negative rules
+#                 if ageReceiver<=(ageSender//2+7): # Rule 1: Must be at least (X/2 + 7). // integer divisn, / returns float
+#                     continue
+#                 if ageSender<ageReceiver:  # Rule 2: Cannot send to an older centaur
+#                     continue
+#                 # if ageSender>100 and ageReceiver<100: # Rule 3: If sender is > 100, receiver must also be > 100
+#                     # continue
+#                 total+=1
+#         return total
+class Solution(object):
+    def numFriendRequests(self, ages):
+        if not ages:
+            return 0
+
+        max_age = max(ages)  # Dynamically find max age to support larger numbers
+        age_counts = [0] * (max_age + 1)  # Stores how many centaurs have each age
+        prefix_sum = [0] * (max_age + 1)  # Cumulative count of centaurs up to each age
+
+        # Step 1: Count occurrences of each age
+        for age in ages:
+            age_counts[age] += 1
+
+        # Step 2: Build prefix sum (cumulative count)
+        for i in range(1, max_age + 1):
+            prefix_sum[i] = prefix_sum[i - 1] + age_counts[i]
+
+        total_requests = 0
+
+        # Step 3: Iterate over sender ages and count requests
+        for sender in range(1, max_age + 1):
+            if age_counts[sender] == 0:
+                continue  # Skip ages with no centaurs
+
+            min_receiver = sender // 2 + 7  # Minimum valid receiver age
+            if min_receiver >= sender:
+                continue  # No valid friends
+
+            # ✅ Correct valid receiver count (prefix sum)
+            valid_receivers = prefix_sum[sender - 1] - prefix_sum[min_receiver]
+
+            total_requests += valid_receivers * age_counts[sender]  # Multiply by sender frequency
+
+            # ✅ Handle self-requests properly (same age sending to each other)
+            total_requests += age_counts[sender] * (age_counts[sender] - 1)
+
+        return total_requests
