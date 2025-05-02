@@ -1,0 +1,25 @@
+class Solution(object):
+    def isNStraightHand(self, hand, group_size):
+        """
+        :type hand: List[int]
+        :type groupSize: int
+        :rtype: bool
+        """
+        if len(hand) % group_size != 0:
+            return False
+
+        freq_map = defaultdict(int)
+        for card in hand:
+            freq_map[card] += 1
+
+        sorted_hand = sorted(freq_map)
+
+        for card in sorted_hand:
+            count = freq_map[card]
+            if count > 0:
+                for i in range(group_size):
+                    next_card = card + i
+                    if freq_map[next_card] < count:
+                        return False
+                    freq_map[next_card] -= count
+        return True
