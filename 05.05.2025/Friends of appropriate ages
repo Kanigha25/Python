@@ -1,23 +1,3 @@
-# Brute Force
-# class Solution(object):
-#     def numFriendRequests(self, ages):
-#         total=0
-#         n=len(ages)
-#         for i in range(n):
-#             ageSender=ages[i]
-#             # sentSender=0
-#             for j in range(n):
-#                 if i==j:
-#                     continue
-#                 ageReceiver=ages[j]       #Negative rules
-#                 if ageReceiver<=(ageSender//2+7): # Rule 1: Must be at least (X/2 + 7). // integer divisn, / returns float
-#                     continue
-#                 if ageSender<ageReceiver:  # Rule 2: Cannot send to an older centaur
-#                     continue
-#                 # if ageSender>100 and ageReceiver<100: # Rule 3: If sender is > 100, receiver must also be > 100
-#                     # continue
-#                 total+=1
-#         return total
 class Solution(object):
     def numFriendRequests(self, ages):
         if not ages:
